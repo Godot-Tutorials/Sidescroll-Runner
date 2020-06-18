@@ -17,7 +17,6 @@ func _physics_process(delta: float) -> void:
 		jump()
 		
 	velocity = move_and_slide(velocity,Vector2.UP)
-	print(is_on_floor())
 
 
 
