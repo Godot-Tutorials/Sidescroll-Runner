@@ -2,7 +2,6 @@ class_name Player
 extends KinematicBody2D
 
 
-
 export var speed: int = 300
 export var gravity: int = 10
 export var gravity_terminal: int = 1000

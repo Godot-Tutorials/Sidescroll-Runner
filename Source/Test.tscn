@@ -18,12 +18,6 @@ remote_path = NodePath("../../Camera2D")
 position = Vector2( 394, 384 )
 scale = Vector2( 300, 1 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 379, 338 )
-current = true
-process_mode = 0
-smoothing_enabled = true
-
 [node name="DebugOverlay" parent="." instance=ExtResource( 4 )]
 
 [node name="RichTextLabel" parent="DebugOverlay" index="0"]
