@@ -1,23 +1,35 @@
 class_name Player
 extends KinematicBody2D
 
-
-export var speed: int = 300
-export var gravity: int = 10
-export var gravity_terminal: int = 1000
-
-var velocity := Vector2.ZERO
 var is_active: bool = false
+
+var max_jump_height: float = 2.25 * Globals.TILE_SIZE
+var min_jump_height: float = 1 * Globals.TILE_SIZE
+var jump_duration: float = 0.5
+# Calculated in _ready()
+var gravity: float
+var gravity_terminal: float
+var max_jump_velocity: float
+var min_jump_velocity: float
+
+var speed: float = 3.5 * Globals.TILE_SIZE
+var velocity := Vector2.ZERO
+
+
+func _ready() -> void:
+	gravity = 2 * max_jump_height / pow(jump_duration,2)
+	gravity_terminal = gravity * 5
+	max_jump_velocity = - sqrt(2 * gravity * max_jump_height)
+	min_jump_velocity = - sqrt(2 * gravity * min_jump_height)
+
 
 func _physics_process(delta: float) -> void:
 	if is_active:
-		apply_gravity()
+		apply_gravity(delta)
 		move()
 		jump()
 		
 	velocity = move_and_slide(velocity,Vector2.UP)
-
-
 
 
 # This is temporary for testing purpuses and will be replaced with pause eventually
@@ -27,9 +39,9 @@ func _input(event: InputEvent) -> void:
 			is_active = true
 
 
-func apply_gravity() -> void:
+func apply_gravity(delta) -> void:
 	if velocity.y < gravity_terminal:
-		velocity.y += gravity
+		velocity.y += gravity * delta
 	else: velocity.y = gravity_terminal
 
 
@@ -38,6 +50,9 @@ func move() -> void:
 
 
 func jump():
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_pressed("ui_accept"):
 		if is_on_floor():
-			velocity.y = -gravity*20
+			velocity.y = max_jump_velocity
+	if Input.is_action_just_released("ui_accept"):
+		if velocity.y < min_jump_velocity:
+			velocity.y = min_jump_velocity

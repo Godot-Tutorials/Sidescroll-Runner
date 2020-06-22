@@ -30,6 +30,10 @@ config/name="Sidescroll Runner"
 run/main_scene="res://Source/Test.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Globals="*res://Source/Singletons/Globals.gd"
+
 [display]
 
 window/size/width=1920
