@@ -16,8 +16,10 @@ var speed: float = 3.5 * Globals.TILE_SIZE
 var velocity := Vector2.ZERO
 
 var is_jumping: bool = false
+var can_coyote_jump: bool = true
 
 onready var jump_buffer: Timer = $JumpBuffer
+onready var coyote_time: Timer = $CoyoteTime
 
 func _ready() -> void:
 	gravity = 2 * max_jump_height / pow(jump_duration,2)
@@ -53,15 +55,35 @@ func move() -> void:
 
 
 func jump():
-	if Input.is_action_pressed("ui_accept"):
+	reset_jumping_capabilities()
+	if Input.is_action_pressed("jump"):
 		is_jumping = true
 		jump_buffer.start()
-	if is_jumping and is_on_floor():
+
+	if is_jumping and can_coyote_jump:
 		velocity.y = max_jump_velocity
-	if Input.is_action_just_released("ui_accept"):
+		can_coyote_jump = false
+	
+	if Input.is_action_just_released("jump"):
 		if velocity.y < min_jump_velocity:
 			velocity.y = min_jump_velocity
 
 
+func reset_jumping_capabilities():
+	activate_coyote_time()
+	if is_on_floor():
+		can_coyote_jump = true
+
+
 func _on_JumpBuffer_timeout() -> void:
 	is_jumping = false
+
+
+func activate_coyote_time() -> void:
+#Keeps timer restaring for as long as we touch floor
+	if is_on_floor() == true:
+		coyote_time.start()
+
+
+func _on_CoyoteTime_timeout() -> void:
+	can_coyote_jump = false

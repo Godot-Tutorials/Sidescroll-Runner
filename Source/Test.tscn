@@ -10,7 +10,7 @@
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 379, 338 )
 
-[node name="RemoteTransform2D" parent="Player" index="3"]
+[node name="RemoteTransform2D" parent="Player" index="4"]
 remote_path = NodePath("../../Camera2D")
 
 [node name="DebugOverlay" parent="." instance=ExtResource( 4 )]
@@ -26,7 +26,7 @@ tile_set = ExtResource( 2 )
 collision_layer = 2
 collision_mask = 2
 format = 1
-tile_data = PoolIntArray( -262116, 0, 0, -131044, 0, 0, 28, 0, 0, 131100, 0, 0, 262172, 0, 0, 393220, 1, 0, 393222, 1, 0, 393224, 1, 0, 393226, 10, 0, 393228, 2, 0, 393230, 2, 0, 393232, 2, 0, 393234, 9, 0, 393236, 1, 0, 393238, 1, 0, 393240, 10, 0, 393242, 7, 0, 393244, 0, 0 )
+tile_data = PoolIntArray( 393220, 1, 0, 393222, 1, 0, 393224, 1, 0, 393226, 10, 0, 393228, 2, 0, 393230, 2, 0, 393232, 2, 0, 393234, 9, 0, 393236, 1, 0, 393238, 1, 0, 393240, 10, 0, 393242, 7, 0 )
 
 [editable path="Player"]
 
