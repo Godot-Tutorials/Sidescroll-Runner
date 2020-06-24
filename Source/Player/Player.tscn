@@ -28,8 +28,6 @@ offset = Vector2( 0, -120 )
 position = Vector2( 0, -67 )
 shape = SubResource( 1 )
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
-
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 2, 2 )
