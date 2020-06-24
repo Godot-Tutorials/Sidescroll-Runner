@@ -3,20 +3,22 @@ extends KinematicBody2D
 
 var is_active: bool = false
 
+#Jumping
 var max_jump_height: float = 2.25 * Globals.TILE_SIZE
 var min_jump_height: float = 1 * Globals.TILE_SIZE
 var jump_duration: float = 0.5
+var is_jumping: bool = false
+var can_coyote_jump: bool = true
+
+#Horisontal movement
+var speed: float = 3.5 * Globals.TILE_SIZE
+var velocity := Vector2.ZERO
+
 # Calculated in _ready()
 var gravity: float
 var gravity_terminal: float
 var max_jump_velocity: float
 var min_jump_velocity: float
-
-var speed: float = 3.5 * Globals.TILE_SIZE
-var velocity := Vector2.ZERO
-
-var is_jumping: bool = false
-var can_coyote_jump: bool = true
 
 onready var jump_buffer: Timer = $JumpBuffer
 onready var coyote_time: Timer = $CoyoteTime
@@ -44,6 +46,14 @@ func _input(event: InputEvent) -> void:
 			is_active = true
 
 
+func _on_JumpBuffer_timeout() -> void:
+	is_jumping = false
+
+
+func _on_CoyoteTime_timeout() -> void:
+	can_coyote_jump = false
+
+
 func apply_gravity(delta) -> void:
 	if velocity.y < gravity_terminal:
 		velocity.y += gravity * delta
@@ -54,7 +64,7 @@ func move() -> void:
 	velocity.x = speed
 
 
-func jump():
+func jump() -> void:
 	reset_jumping_capabilities()
 	if Input.is_action_pressed("jump"):
 		is_jumping = true
@@ -69,14 +79,10 @@ func jump():
 			velocity.y = min_jump_velocity
 
 
-func reset_jumping_capabilities():
+func reset_jumping_capabilities() -> void:
 	activate_coyote_time()
 	if is_on_floor():
 		can_coyote_jump = true
-
-
-func _on_JumpBuffer_timeout() -> void:
-	is_jumping = false
 
 
 func activate_coyote_time() -> void:
@@ -84,6 +90,3 @@ func activate_coyote_time() -> void:
 	if is_on_floor() == true:
 		coyote_time.start()
 
-
-func _on_CoyoteTime_timeout() -> void:
-	can_coyote_jump = false
