@@ -11,6 +11,10 @@ height = 60.0
 collision_mask = 2
 script = ExtResource( 2 )
 
+[node name="JumpBuffer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -8 )
 texture = ExtResource( 1 )
@@ -25,3 +29,4 @@ shape = SubResource( 1 )
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 2, 2 )
+[connection signal="timeout" from="JumpBuffer" to="." method="_on_JumpBuffer_timeout"]

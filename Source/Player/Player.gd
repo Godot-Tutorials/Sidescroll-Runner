@@ -15,6 +15,9 @@ var min_jump_velocity: float
 var speed: float = 3.5 * Globals.TILE_SIZE
 var velocity := Vector2.ZERO
 
+var is_jumping: bool = false
+
+onready var jump_buffer: Timer = $JumpBuffer
 
 func _ready() -> void:
 	gravity = 2 * max_jump_height / pow(jump_duration,2)
@@ -51,8 +54,14 @@ func move() -> void:
 
 func jump():
 	if Input.is_action_pressed("ui_accept"):
-		if is_on_floor():
-			velocity.y = max_jump_velocity
+		is_jumping = true
+		jump_buffer.start()
+	if is_jumping and is_on_floor():
+		velocity.y = max_jump_velocity
 	if Input.is_action_just_released("ui_accept"):
 		if velocity.y < min_jump_velocity:
 			velocity.y = min_jump_velocity
+
+
+func _on_JumpBuffer_timeout() -> void:
+	is_jumping = false
