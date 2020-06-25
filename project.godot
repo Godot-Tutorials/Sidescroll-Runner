@@ -33,6 +33,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Globals="*res://Source/Singletons/Globals.gd"
+GameManager="*res://Source/Singletons/GameManager/GameManager.tscn"
 
 [display]
 
