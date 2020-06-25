@@ -95,6 +95,7 @@ func activate_coyote_time() -> void:
 	if is_on_floor() == true:
 		coyote_time.start()
 
+
 func control_animations():
 	if is_active:
 		if velocity.y < 0:
@@ -103,3 +104,5 @@ func control_animations():
 			animated_sprite.play("fall")
 		else:
 			animated_sprite.play("run")
+
+
