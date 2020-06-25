@@ -22,12 +22,14 @@ var min_jump_velocity: float
 
 onready var jump_buffer: Timer = $JumpBuffer
 onready var coyote_time: Timer = $CoyoteTime
+onready var animated_sprite = $AnimatedSprite
 
 func _ready() -> void:
 	gravity = 2 * max_jump_height / pow(jump_duration,2)
 	gravity_terminal = gravity * 5
 	max_jump_velocity = - sqrt(2 * gravity * max_jump_height)
 	min_jump_velocity = - sqrt(2 * gravity * min_jump_height)
+	animated_sprite.play("idle")
 
 
 func _physics_process(delta: float) -> void:
@@ -37,6 +39,9 @@ func _physics_process(delta: float) -> void:
 		jump()
 		
 	velocity = move_and_slide(velocity,Vector2.UP)
+
+func _process(delta: float) -> void:
+	control_animations()
 
 
 # This is temporary for testing purpuses and will be replaced with pause eventually
@@ -90,3 +95,11 @@ func activate_coyote_time() -> void:
 	if is_on_floor() == true:
 		coyote_time.start()
 
+func control_animations():
+	if is_active:
+		if velocity.y < 0:
+			animated_sprite.play("jump")
+		elif velocity.y > 0:
+			animated_sprite.play("fall")
+		else:
+			animated_sprite.play("run")
