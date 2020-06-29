@@ -4,7 +4,7 @@
 [ext_resource path="res://Source/Tiles/Tilesets/TilesetDirt.tres" type="TileSet" id=2]
 [ext_resource path="res://Source/DebugManagerTest.gd" type="Script" id=3]
 [ext_resource path="res://Source/Tools/Debug/DebugOverlay.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Source/Collectables/Collectable.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Source/Collectables/Coins/Coin.tscn" type="PackedScene" id=5]
 
 [node name="Test" type="Node2D"]
 
@@ -24,9 +24,12 @@ tile_set = ExtResource( 2 )
 collision_layer = 2
 collision_mask = 2
 format = 1
-tile_data = PoolIntArray( 131088, 12, 0, 131090, 12, 0, 131092, 12, 0, 131094, 12, 0, 131096, 12, 0, 131098, 12, 0, 131100, 12, 0, 131102, 12, 0, 131104, 12, 0, 131106, 12, 0, 131108, 12, 0, 131110, 12, 0, 131112, 12, 0, 131114, 12, 0, 131116, 12, 0, 131118, 12, 0, 131120, 12, 0, 131122, 12, 0, 131124, 12, 0, 393221, 12, 0, 393223, 12, 0, 393225, 12, 0, 393227, 12, 0, 393229, 12, 0, 393231, 12, 0, 393233, 12, 0, 393235, 12, 0, 393237, 12, 0, 393239, 12, 0, 393241, 12, 0, 393243, 12, 0, 393245, 12, 0, 393247, 12, 0, 393249, 12, 0, 393251, 12, 0, 393253, 12, 0, 393255, 12, 0, 393257, 12, 0, 393259, 12, 0, 393261, 12, 0, 393263, 12, 0, 393265, 12, 0, 393267, 12, 0, 393269, 12, 0, 393271, 12, 0, 393273, 12, 0 )
+tile_data = PoolIntArray( 393221, 12, 0, 393223, 12, 0, 393225, 12, 0, 393227, 12, 0, 393229, 12, 0, 393231, 12, 0, 393233, 12, 0, 393235, 12, 0, 393237, 12, 0, 393239, 12, 0, 393241, 12, 0, 393243, 12, 0, 393245, 12, 0, 393247, 12, 0, 393249, 12, 0, 393251, 12, 0, 393253, 12, 0, 393255, 12, 0, 393257, 12, 0, 393259, 12, 0, 393261, 12, 0, 393263, 12, 0, 393265, 12, 0, 393267, 12, 0, 393269, 12, 0, 393271, 12, 0, 393273, 12, 0 )
 
-[node name="Collectable" parent="." instance=ExtResource( 6 )]
-position = Vector2( 1280, 256 )
+[node name="Coin" parent="." instance=ExtResource( 5 )]
+position = Vector2( 876, 304 )
+
+[node name="Coin2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 1208, 304 )
 
 [editable path="DebugOverlay"]
