@@ -160,6 +160,7 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="dirtHalf/StaticBody2D" index="0"]
 position = Vector2( 64, 37 )
 shape = ExtResource( 21 )
+one_way_collision = true
 
 [node name="dirtHalf_left" type="Sprite" parent="." index="13"]
 position = Vector2( 0, 640 )
@@ -171,6 +172,7 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="dirtHalf_left/StaticBody2D" index="0"]
 position = Vector2( 64, 37 )
 shape = ExtResource( 21 )
+one_way_collision = true
 
 [node name="dirtHalf_mid" type="Sprite" parent="." index="14"]
 position = Vector2( 256, 640 )
@@ -182,6 +184,7 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="dirtHalf_mid/StaticBody2D" index="0"]
 position = Vector2( 64, 37 )
 shape = ExtResource( 21 )
+one_way_collision = true
 
 [node name="dirtHalf_right" type="Sprite" parent="." index="15"]
 position = Vector2( 512, 640 )
@@ -193,6 +196,7 @@ centered = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="dirtHalf_right/StaticBody2D" index="0"]
 position = Vector2( 64, 37 )
 shape = ExtResource( 21 )
+one_way_collision = true
 
 [node name="dirtLeft" type="Sprite" parent="." index="16"]
 position = Vector2( 0, 896 )
