@@ -16,6 +16,6 @@ func _on_body_entered(body: Node) -> void:
 #warning for editor in case I forget to add node to group
 func _get_configuration_warning() -> String:
 	var warning: String = ""
-	if get_groups() == []:
+	if get_groups().empty():
 		warning = "Add node to a group"
 	return warning
