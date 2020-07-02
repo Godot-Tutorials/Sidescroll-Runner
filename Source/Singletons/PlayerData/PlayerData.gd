@@ -3,6 +3,8 @@ extends Node
 # Stores all player data to be transfered between a scenes and will eventually 
 # be used to create a save for the game from 
 
+signal gui_updated
+
 var coins_collected_this_level: int = 0
 
 func _on_Collectable_collected(obj:Area2D) -> void:
@@ -17,4 +19,5 @@ func _on_Collectable_collected(obj:Area2D) -> void:
 
 func _coin_collected():
 	coins_collected_this_level +=1
+	emit_signal("gui_updated")
 	print(coins_collected_this_level)
