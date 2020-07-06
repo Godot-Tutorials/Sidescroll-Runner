@@ -9,6 +9,9 @@ var min_jump_height: float = 1 * Globals.TILE_SIZE
 var jump_duration: float = 0.5
 var is_jumping: bool = false
 var can_coyote_jump: bool = true
+var can_multijump: bool = false
+var multijump_limit: int = 2 # min 2 to be able to double jump
+var multijump_count: int = 0
 
 #Horisontal movement
 var speed: float = 3.5 * Globals.TILE_SIZE
@@ -71,23 +74,51 @@ func move() -> void:
 
 func jump() -> void:
 	reset_jumping_capabilities()
-	if Input.is_action_pressed("jump"):
-		is_jumping = true
-		jump_buffer.start()
-
-	if is_jumping and can_coyote_jump:
-		velocity.y = max_jump_velocity
-		can_coyote_jump = false
+	# Regular jump
+	if not can_multijump:
+	# We can jump even if we press jump slighly befor touching ground thanks to jump_buffer
+		if Input.is_action_pressed("jump"):
+			is_jumping = true
+			jump_buffer.start()
+			if is_jumping and can_coyote_jump:
+				velocity.y = max_jump_velocity
+				can_coyote_jump = false
 	
+	#Multijump
+	else:
+		# If we did more than one jump we can check if we can multijump
+		if can_multijump and Input.is_action_pressed("jump"):
+			do_multijump()
+			# Reset multijump so we don't fly up continuesly while we hold jump key
+			can_multijump = false
+	
+	# Apply half-jump 
 	if Input.is_action_just_released("jump"):
 		if velocity.y < min_jump_velocity:
 			velocity.y = min_jump_velocity
+		
+		# Decide if we can multijump
+		multijump_count +=1
+		if multijump_count > multijump_limit:
+			multijump_count = multijump_limit
+			can_multijump = false
+		else:
+			can_multijump = true
+
+
+func do_multijump():
+	if multijump_count < multijump_limit:
+		velocity.y = max_jump_velocity
+		is_jumping = true
+		jump_buffer.start()
 
 
 func reset_jumping_capabilities() -> void:
 	activate_coyote_time()
 	if is_on_floor():
 		can_coyote_jump = true
+		multijump_count = 0
+		can_multijump = false
 
 
 func activate_coyote_time() -> void:
