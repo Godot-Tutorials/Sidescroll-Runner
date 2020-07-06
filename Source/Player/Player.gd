@@ -8,6 +8,7 @@ var max_jump_height: float = 2.25 * Globals.TILE_SIZE
 var min_jump_height: float = 1 * Globals.TILE_SIZE
 var jump_duration: float = 0.5
 var is_jumping: bool = false
+var jumped: bool = false
 var can_coyote_jump: bool = true
 var can_multijump: bool = false
 var multijump_limit: int = 2 # min 2 to be able to double jump
@@ -81,6 +82,7 @@ func jump() -> void:
 			is_jumping = true
 			jump_buffer.start()
 			if is_jumping and can_coyote_jump:
+				jumped = true
 				velocity.y = max_jump_velocity
 				can_coyote_jump = false
 	
@@ -103,7 +105,8 @@ func jump() -> void:
 			multijump_count = multijump_limit
 			can_multijump = false
 		else:
-			can_multijump = true
+			if jumped:
+				can_multijump = true
 
 
 func do_multijump():
@@ -119,6 +122,7 @@ func reset_jumping_capabilities() -> void:
 		can_coyote_jump = true
 		multijump_count = 0
 		can_multijump = false
+		jumped = false
 
 
 func activate_coyote_time() -> void:
