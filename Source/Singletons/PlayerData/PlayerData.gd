@@ -24,8 +24,8 @@ func _coin_collected():
 	coins_collected_this_level +=1
 	emit_signal("gui_updated")
 
-func on_Player_distance_milestone_achived() -> void:
+func _on_Player_distance_milestone_achived() -> void:
 	current_energy -= 1
 	print(current_energy)
-	if current_energy < 0:
+	if current_energy <= 0:
 		emit_signal("out_of_energy")

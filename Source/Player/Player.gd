@@ -31,15 +31,15 @@ var min_jump_velocity: float
 var distance_milestone = 500
 var distance_milestone_achived = 1
 
-onready var starting_position: float = position.x
+onready var starting_distance: float = position.x
 onready var jump_buffer: Timer = $JumpBuffer
 onready var coyote_time: Timer = $CoyoteTime
 onready var animated_sprite: AnimatedSprite = $AnimatedSprite
-onready var camera: Camera2D = $Camera2D
+onready var my_camera: Camera2D = $Camera2D
 
 func _ready() -> void:
-	self.connect("distance_milestone_achived", PlayerData,"on_Player_distance_milestone_achived")
-	PlayerData.connect("out_of_energy",self, "on_PlayerData_out_of_energy")
+	self.connect("distance_milestone_achived", PlayerData,"_on_Player_distance_milestone_achived")
+	PlayerData.connect("out_of_energy",self, "_on_PlayerData_out_of_energy")
 	
 	animated_sprite.play("idle")
 	
@@ -79,11 +79,18 @@ func _on_CoyoteTime_timeout() -> void:
 	can_coyote_jump = false
 
 
-func on_PlayerData_out_of_energy() -> void:
-	var camera_to_remove = camera
-	remove_child(camera_to_remove)
-	camera_to_remove.global_position = global_position
+func _on_PlayerData_out_of_energy() -> void:
+	# New Camera
+	var cam: Camera2D = Camera2D.new()
+	cam.zoom = Vector2(2,2)
+	cam.global_position = global_position
+	var root = get_tree().current_scene
+	root.add_child(cam)
+	my_camera.current = false
+	cam.current = true
+	#Die
 	queue_free()
+
 
 func apply_gravity(delta) -> void:
 	if velocity.y < gravity_terminal:
@@ -168,8 +175,9 @@ func control_animations() -> void:
 
 
 func calculate_distance_run() -> float:
-	var distance_run_so_far = position.x - starting_position
+	var distance_run_so_far = position.x - starting_distance
 	return distance_run_so_far
+
 
 func inform_about_passing_distance_milestone() -> void:
 	var distance_run_so_far: float = calculate_distance_run()
