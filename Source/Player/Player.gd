@@ -117,6 +117,10 @@ func do_multijump():
 
 
 func reset_jumping_capabilities() -> void:
+	# prevent multijump if falling for too long.
+	if velocity.y > gravity:
+		can_multijump = false
+	#reset everything when touching floor
 	activate_coyote_time()
 	if is_on_floor():
 		can_coyote_jump = true
