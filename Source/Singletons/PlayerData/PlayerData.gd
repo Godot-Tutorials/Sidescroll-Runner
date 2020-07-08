@@ -4,8 +4,11 @@ extends Node
 # be used to create a save for the game from 
 
 signal gui_updated
+signal out_of_energy
 
 var coins_collected_this_level: int = 0
+var max_energy: int = 3
+var current_energy: int = max_energy
 
 func _on_Collectable_collected(obj:Area2D) -> void:
 	# Check in what group objects are and decides what to do with this information
@@ -20,4 +23,9 @@ func _on_Collectable_collected(obj:Area2D) -> void:
 func _coin_collected():
 	coins_collected_this_level +=1
 	emit_signal("gui_updated")
-	print(coins_collected_this_level)
+
+func on_Player_distance_milestone_achived() -> void:
+	current_energy -= 1
+	print(current_energy)
+	if current_energy < 0:
+		emit_signal("out_of_energy")

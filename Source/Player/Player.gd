@@ -1,6 +1,9 @@
 class_name Player
 extends KinematicBody2D
 
+
+signal distance_milestone_achived
+
 var is_active: bool = false
 
 #Jumping
@@ -24,16 +27,27 @@ var gravity_terminal: float
 var max_jump_velocity: float
 var min_jump_velocity: float
 
+# Running distance calculations
+var distance_milestone = 500
+var distance_milestone_achived = 1
+
+onready var starting_position: float = position.x
 onready var jump_buffer: Timer = $JumpBuffer
 onready var coyote_time: Timer = $CoyoteTime
-onready var animated_sprite = $AnimatedSprite
+onready var animated_sprite: AnimatedSprite = $AnimatedSprite
+onready var camera: Camera2D = $Camera2D
 
 func _ready() -> void:
+	self.connect("distance_milestone_achived", PlayerData,"on_Player_distance_milestone_achived")
+	PlayerData.connect("out_of_energy",self, "on_PlayerData_out_of_energy")
+	
+	animated_sprite.play("idle")
+	
+	#gravity calculations
 	gravity = 2 * max_jump_height / pow(jump_duration,2)
 	gravity_terminal = gravity * 5
 	max_jump_velocity = - sqrt(2 * gravity * max_jump_height)
 	min_jump_velocity = - sqrt(2 * gravity * min_jump_height)
-	animated_sprite.play("idle")
 
 
 func _physics_process(delta: float) -> void:
@@ -43,6 +57,8 @@ func _physics_process(delta: float) -> void:
 		jump()
 		
 	velocity = move_and_slide(velocity,Vector2.UP)
+	inform_about_passing_distance_milestone()
+
 
 func _process(delta: float) -> void:
 	control_animations()
@@ -62,6 +78,12 @@ func _on_JumpBuffer_timeout() -> void:
 func _on_CoyoteTime_timeout() -> void:
 	can_coyote_jump = false
 
+
+func on_PlayerData_out_of_energy() -> void:
+	var camera_to_remove = camera
+	remove_child(camera_to_remove)
+	camera_to_remove.global_position = global_position
+	queue_free()
 
 func apply_gravity(delta) -> void:
 	if velocity.y < gravity_terminal:
@@ -109,7 +131,7 @@ func jump() -> void:
 				can_multijump = true
 
 
-func do_multijump():
+func do_multijump()-> void:
 	if multijump_count < multijump_limit:
 		velocity.y = max_jump_velocity
 		is_jumping = true
@@ -135,7 +157,7 @@ func activate_coyote_time() -> void:
 		coyote_time.start()
 
 
-func control_animations():
+func control_animations() -> void:
 	if is_active:
 		if velocity.y < 0:
 			animated_sprite.play("jump")
@@ -144,4 +166,14 @@ func control_animations():
 		else:
 			animated_sprite.play("run")
 
+
+func calculate_distance_run() -> float:
+	var distance_run_so_far = position.x - starting_position
+	return distance_run_so_far
+
+func inform_about_passing_distance_milestone() -> void:
+	var distance_run_so_far: float = calculate_distance_run()
+	if distance_run_so_far > distance_milestone * distance_milestone_achived:
+		distance_milestone_achived += 1
+		emit_signal("distance_milestone_achived")
 
