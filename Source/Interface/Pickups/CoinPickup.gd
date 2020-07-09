@@ -7,15 +7,14 @@ onready var coin_counter: Label = $CoinCounter
 
 func _ready() -> void:
 	_vanish()
-	PlayerData.connect("gui_updated",self,"_on_GUI_updated")
-	#connect(signal: String, target: Object, method: String, binds: Array = [  ], flags: int = 0)
+	PlayerData.connect("coin_gui_updated",self,"_coin_gui_updated")
 
 
 func _on_Timer_timeout() -> void:
 	_vanish()
 
 
-func _on_GUI_updated():
+func _coin_gui_updated():
 	_update_label()
 	_appear()
 	vanish_timer.start()
