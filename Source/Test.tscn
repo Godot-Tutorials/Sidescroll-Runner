@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Source/Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Source/Tiles/Tilesets/TilesetDirt.tres" type="TileSet" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Source/Tools/Debug/DebugOverlay.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Source/Collectables/Coins/Coin.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Source/Interface/Interface.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Source/Collectables/OxygenPickup/OxygenPickup.tscn" type="PackedScene" id=7]
 
 [node name="Test" type="Node2D"]
 
@@ -37,5 +38,14 @@ rect_scale = Vector2( 2, 2 )
 
 [node name="DebugManager" parent="DebugOverlay" index="1"]
 script = ExtResource( 3 )
+
+[node name="OxygenPickup" parent="." instance=ExtResource( 7 )]
+position = Vector2( 654.064, 309.194 )
+
+[node name="OxygenPickup2" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1051.26, 313.951 )
+
+[node name="OxygenPickup3" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1386.62, 302.059 )
 
 [editable path="DebugOverlay"]

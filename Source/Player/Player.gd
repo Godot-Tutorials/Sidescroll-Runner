@@ -39,7 +39,7 @@ onready var my_camera: Camera2D = $Camera2D
 
 func _ready() -> void:
 	self.connect("distance_milestone_achived", PlayerData,"_on_Player_distance_milestone_achived")
-	PlayerData.connect("out_of_energy",self, "_on_PlayerData_out_of_energy")
+	PlayerData.connect("out_of_oxygen",self, "_on_PlayerData_out_of_oxygen")
 	
 	animated_sprite.play("idle")
 	
@@ -79,7 +79,7 @@ func _on_CoyoteTime_timeout() -> void:
 	can_coyote_jump = false
 
 
-func _on_PlayerData_out_of_energy() -> void:
+func _on_PlayerData_out_of_oxygen() -> void:
 	# New Camera
 	var cam: Camera2D = Camera2D.new()
 	cam.zoom = Vector2(2,2)
