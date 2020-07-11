@@ -6,7 +6,7 @@ signal distance_milestone_achived
 
 var is_active: bool = false
 
-#Jumping
+# Jumping
 var max_jump_height: float = 2.25 * Globals.TILE_SIZE
 var min_jump_height: float = 1 * Globals.TILE_SIZE
 var jump_duration: float = 0.5
@@ -17,11 +17,11 @@ var can_multijump: bool = false
 var multijump_limit: int = 2 # min 2 to be able to double jump
 var multijump_count: int = 0
 
-#Horisontal movement
+# Horizontal movement
 var speed: float = 3.5 * Globals.TILE_SIZE
 var velocity := Vector2.ZERO
 
-# Calculated in _ready()
+# Calculated in _setup_jump_parameters()
 var gravity: float
 var gravity_terminal: float
 var max_jump_velocity: float
@@ -38,30 +38,22 @@ onready var animated_sprite: AnimatedSprite = $AnimatedSprite
 onready var my_camera: Camera2D = $Camera2D
 
 func _ready() -> void:
-	self.connect("distance_milestone_achived", PlayerData,"_on_Player_distance_milestone_achived")
-	PlayerData.connect("out_of_oxygen",self, "_on_PlayerData_out_of_oxygen")
-	
-	animated_sprite.play("idle")
-	
-	#gravity calculations
-	gravity = 2 * max_jump_height / pow(jump_duration,2)
-	gravity_terminal = gravity * 5
-	max_jump_velocity = - sqrt(2 * gravity * max_jump_height)
-	min_jump_velocity = - sqrt(2 * gravity * min_jump_height)
+	_setup_signals_connections()
+	_setup_jump_parameters()
+	_control_animations()
 
 
 func _physics_process(delta: float) -> void:
 	if is_active:
-		apply_gravity(delta)
-		move()
-		jump()
+		_apply_gravity(delta)
+		_process_jumping()
+		_move()
 		
-	velocity = move_and_slide(velocity,Vector2.UP)
 	inform_about_passing_distance_milestone()
 
 
 func _process(delta: float) -> void:
-	control_animations()
+	_control_animations()
 
 
 # This is temporary for testing purpuses and will be replaced with pause eventually
@@ -69,6 +61,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.pressed:
 			is_active = true
+
+
+func _setup_signals_connections() -> void:
+	self.connect("distance_milestone_achived", PlayerData,"_on_Player_distance_milestone_achived")
+	PlayerData.connect("out_of_oxygen",self, "_on_PlayerData_out_of_oxygen")
 
 
 func _on_JumpBuffer_timeout() -> void:
@@ -90,19 +87,27 @@ func _on_PlayerData_out_of_oxygen() -> void:
 	cam.current = true
 	#Die
 	queue_free()
+ 
+
+func _setup_jump_parameters() -> void:
+	gravity = 2 * max_jump_height / pow(jump_duration,2)
+	gravity_terminal = gravity * 5
+	max_jump_velocity = - sqrt(2 * gravity * max_jump_height)
+	min_jump_velocity = - sqrt(2 * gravity * min_jump_height)
 
 
-func apply_gravity(delta) -> void:
+func _apply_gravity(delta) -> void:
 	if velocity.y < gravity_terminal:
 		velocity.y += gravity * delta
 	else: velocity.y = gravity_terminal
 
 
-func move() -> void:
+func _move() -> void:
 	velocity.x = speed
+	velocity = move_and_slide(velocity,Vector2.UP)
 
 
-func jump() -> void:
+func _process_jumping() -> void:
 	reset_jumping_capabilities()
 	# Regular jump
 	if not can_multijump:
@@ -119,7 +124,7 @@ func jump() -> void:
 	else:
 		# If we did more than one jump we can check if we can multijump
 		if can_multijump and Input.is_action_pressed("jump"):
-			do_multijump()
+			_do_multijump()
 			# Reset multijump so we don't fly up continuesly while we hold jump key
 			can_multijump = false
 	
@@ -138,7 +143,7 @@ func jump() -> void:
 				can_multijump = true
 
 
-func do_multijump()-> void:
+func _do_multijump()-> void:
 	if multijump_count < multijump_limit:
 		velocity.y = max_jump_velocity
 		is_jumping = true
@@ -150,7 +155,7 @@ func reset_jumping_capabilities() -> void:
 	if velocity.y > gravity:
 		can_multijump = false
 	#reset everything when touching floor
-	activate_coyote_time()
+	_activate_coyote_time()
 	if is_on_floor():
 		can_coyote_jump = true
 		multijump_count = 0
@@ -158,20 +163,10 @@ func reset_jumping_capabilities() -> void:
 		jumped = false
 
 
-func activate_coyote_time() -> void:
+func _activate_coyote_time() -> void:
 #Keeps timer restaring for as long as we touch floor
 	if is_on_floor() == true:
 		coyote_time.start()
-
-
-func control_animations() -> void:
-	if is_active:
-		if velocity.y < 0:
-			animated_sprite.play("jump")
-		elif velocity.y > 0:
-			animated_sprite.play("fall")
-		else:
-			animated_sprite.play("run")
 
 
 func calculate_distance_run() -> float:
@@ -185,3 +180,14 @@ func inform_about_passing_distance_milestone() -> void:
 		distance_milestone_achived += 1
 		emit_signal("distance_milestone_achived")
 
+
+func _control_animations() -> void:
+	if is_active:
+		if velocity.y < 0:
+			animated_sprite.play("jump")
+		elif velocity.y > 0:
+			animated_sprite.play("fall")
+		else:
+			animated_sprite.play("run")
+	else: 
+		animated_sprite.play("idle")
