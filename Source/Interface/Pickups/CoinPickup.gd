@@ -6,7 +6,11 @@ onready var vanish_timer: Timer = $VanishTimer
 onready var coin_counter: Label = $CoinCounter
 
 func _ready() -> void:
+	_setup_signals_connections()
 	_vanish()
+
+
+func _setup_signals_connections() -> void:
 	PlayerData.connect("coin_gui_updated",self,"_coin_gui_updated")
 
 
